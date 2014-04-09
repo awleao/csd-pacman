@@ -19,31 +19,23 @@ public class PacbolaTest {
 	
 	@Test
 	public void DevePararAoEncontrarBloqueioDireita() {
-		char[] mapa = new char[]{'<', ' ', '-', '-', '-', '-', '-', 'B', '-', '-', '-'};
+		char[] mapa = new char[]{'B', '<', '-', '-', '-', '-', '-', 'B', '-', '-', '-', 'B'};
 		jogo = new Jogo(mapa, DIRECAO.DIREITA);
-		tela("< -----B---");
-		espera(7);
-		tela("      <B---");
-	}
-	
-	@Test
-	public void FantasmaDeveAparecerSeEstiverNoMapa() {
-		char[] mapa = new char[]{'<', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-'};
-		jogo = new Jogo(mapa, DIRECAO.DIREITA);
-		tela("< ---------");
-		espera();
-		tela(" <---------");
+		tela("B<-----B---B");
+		espera(6);
+		tela("B@    <B---B");
 	}
 	
 	@Test
 	public void PacmanAndarUmaPosicaoNoMapa(){
-		char[] mapa = new char[]{' ', ' ', '<', '-', '-', '-', '-', '-', '-', '-', '-'};
+		char[] mapa = new char[]{'B', ' ', '<', '-', '-', '-', '-', '-', '-', '-', '-', 'B'};
 		jogo = new Jogo(mapa, DIRECAO.DIREITA);
-		tela("  <--------");
+		tela("B <--------B");
 		espera();
-		tela("   <-------");
+		tela("B@ <-------B");
 	}
 	
+
 
 	@Test
 	public void telaInicial() {
@@ -53,71 +45,87 @@ public class PacbolaTest {
 	@Test
 	public void segundoFrame() {
 		espera();
-		tela("B @   --  <---------*B");
+		tela("B@    --  <---------*B");
 	}
 	
 	@Test
 	public void segundoFrameSeEsquerda() {
 		esquerda();
 		espera();
-		tela("B @   -->  ---------*B");
+		tela("B@    -->  ---------*B");
 	}
 	
 	@Test
 	public void deveComerTudoOQuePassar() {
 		espera(11);
-		tela("B     --    @       OB");
+		tela("B@    --            OB");
 	}
 	
 	@Test
 	public void deveMudarDirecaoParaEsquerda() {
 		tela("B@    -- < ---------*B");
 		espera();
-		tela("B @   --  <---------*B");
+		tela("B@    --  <---------*B");
 		espera();
-		tela("B  @  --   <--------*B");
+		tela("B@    --   <--------*B");
 		esquerda();
 		espera();
-		tela("B   @ --  > --------*B");
+		tela("B@    --  > --------*B");
 	}
 
 	@Test
 	public void deveMudarDirecaoParaDireita() {
 		tela("B@    -- < ---------*B");
 		espera(2);
-		tela("B  @  --   <--------*B");
+		tela("B@    --   <--------*B");
 		esquerda();
 		espera();
-		tela("B   @ --  > --------*B");
+		tela("B@    --  > --------*B");
 		direita();
 		espera(2);
-		tela("B     @-    <-------*B");
+		tela("B@    --    <-------*B");
 	}
 	
 	@Test
-	public void deveFantasmaNaoComerFrutinha() {
-		espera(11);
-		tela("B     --    @       OB");
+	public void deveMorrerQuandoEncostaNoFantasmaQuandoEstaAoLado() {
+		char[] mapa = new char[]{'B', '@', '>', ' ', ' ', ' ', '-', '-', ' ', ' ', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', 'B'};
+		jogo = new Jogo(mapa, DIRECAO.ESQUERDA);
+		vivo();
+		espera();
+		tela("B@    --   ---------*B");
+		morreu();
 	}
 	
 	@Test
 	public void deveMorrerQuandoEncostaNoFantasma() {
 		vivo();
 		esquerda();
-		espera();
-		tela("B @   -->  ---------*B");
-		espera(2);
-		tela("B   @ >    ---------*B");
-		espera();
-		tela("B    @     ---------*B");
+		espera(8);
+		tela("B@         ---------*B");
 		morreu();
 	}
 	
 	@Test
 	public void deveMatarFantasmaAposComerFruta() {
+		espera(11);
+		tela("B@    --            OB");
+		esquerda();
 		espera(19);
-		tela("B     --            OB");
+		tela("BO                   B");
 		vivo();
+	}
+	
+	private void matarFantasma() {
+		espera(11);
+		esquerda();
+		espera(4);
+	}
+	
+	@Test
+	public void reviverFantasma() {
+		matarFantasma();
+		espera();
+		tela("B@    --       O     B");
 	}
 	
 	@Test
@@ -131,9 +139,7 @@ public class PacbolaTest {
 	@Test
 	public void bolaDevePararNoFinalADireita() {
 		espera(12);
-		tela("B     --     @      OB");
-		espera();
-		tela("B     --      @     OB");
+		tela("B@    --            OB");
 	}
 	
 	

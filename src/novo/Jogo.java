@@ -7,7 +7,6 @@ import java.io.File;
 public class Jogo {
 	
 	private char[] mapa;
-	private char coisaEmbaixoDoFantasma = ' ';
 	private boolean morreu = false;
 	private boolean isFraco = true;
 	private boolean matouFantasma = false;
@@ -58,7 +57,7 @@ public class Jogo {
 		direcao = direcaoBola;
 	}
 	
-	public int encontrarBola(char[] mapa){
+	private int encontrarBola(char[] mapa){
 		int posicao = 0;
 		for (char c : mapa) {			
 			if ((c=='<') || (c=='>') || (c=='v') || (c=='^')|| (c=='O'))				
@@ -69,7 +68,7 @@ public class Jogo {
 		return 0;
 	}
 	
-	public int encontrarFantasma(char[] mapa){
+	private int encontrarFantasma(char[] mapa){
 		int posicao = 0;
 		for (char c : mapa) {
 			if (c=='@')				
@@ -78,6 +77,11 @@ public class Jogo {
 			posicao++;
 		}
 		return -1;
+	}
+	
+	public void reviveFantasma(){
+		if (encontrarFantasma(mapa) == -1)
+			mapa[1] = '@';
 	}
 
 	private void CriarMapa(char[] mapa) {
@@ -103,38 +107,15 @@ public class Jogo {
 					posicaoBola -= 22;
 				break;
 			}
-
-			moverBola(posicaoAnterior, posicaoBola);
-			moverFantasma();
+			
+			reviveFantasma();
+			moverBola(posicaoAnterior, posicaoBola);			
 		}
  	}
 
-	private void moverFantasma() {
-		int posicaoFantasma = encontrarFantasma(mapa);
-		
-		if (posicaoFantasma == -1)
-			return;
-					
-		mapa[posicaoFantasma] = coisaEmbaixoDoFantasma;
-		if(posicaoFantasma < finalDaLinha())
-			posicaoFantasma++;
-		if(posicaoFantasma == encontrarBola(mapa)) {
-			if(isFraco) {
-				morreu = true;
-			} else {
-				matouFantasma = true;
-			}
-		}
-		coisaEmbaixoDoFantasma = mapa[posicaoFantasma];
-		if(!matouFantasma) {
-			mapa[posicaoFantasma] = '@';
-		}
-	}
-
 	private void moverBola(int posicaoAnterior, int posicaoAtual) {
 
-		if(mapa[posicaoAtual] == 'B')
-		{
+		if(mapa[posicaoAtual] == 'B') {
 			posicaoAtual = posicaoAnterior;
 		} else {
 			mapa[posicaoAnterior] = ' ';	
@@ -143,7 +124,17 @@ public class Jogo {
 		if(mapa[posicaoAtual] == '*')
 			isFraco = false;
 		
-		mapa[posicaoAtual] = aparencia();
+		if(mapa[posicaoAtual] == '@'){
+			if (isFraco){
+				morreu = true;
+				mapa[posicaoAtual] = '@';
+			} else {				
+				mapa[posicaoAtual] = aparencia();
+			}
+		} else {
+			mapa[posicaoAtual] = aparencia();
+		}
+		
 		//FIXME: Ausencia do arquivo.
 		//sound.play();
 	}
