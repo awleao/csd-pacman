@@ -20,13 +20,15 @@ public class JogoCanvas extends JFrame {
 	private final Map<Character, BufferedImage> _sprites = new HashMap<Character, BufferedImage>();;
 
 	public JogoCanvas(){
-		setAlwaysOnTop(true);
-		setSize(new Dimension(710, 67));
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(new Dimension(710, 710));
 		setBackground(Color.BLACK);
 		
 		try {
 			_sprites.put('>', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-inverso.gif")));
 			_sprites.put('<', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
+			_sprites.put('v', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
+			_sprites.put('^', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
 			_sprites.put('O', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-inverso-power.gif")));	
 			_sprites.put('@', ImageIO.read(JogoCanvas.class.getResourceAsStream("fantasma.png")));
 			_sprites.put('*', ImageIO.read(JogoCanvas.class.getResourceAsStream("fruta.jpg")));
@@ -62,5 +64,5 @@ public class JogoCanvas extends JFrame {
 		if (bufferedImage == null) System.out.println("Sprite nao registrada para caracter: '" + caractere +"'");
 		return bufferedImage;
 	}
-	
+
 }

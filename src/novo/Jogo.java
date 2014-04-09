@@ -1,16 +1,55 @@
 package novo;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.io.File;
+
 public class Jogo {
 	
 	private char[] mapa;
 	private char coisaEmbaixoDoFantasma = ' ';
-	private boolean isDireita = true;
 	private boolean morreu = false;
 	private boolean isFraco = true;
 	private boolean matouFantasma = false;
 	
+	private DIRECAO direcao = DIRECAO.ESQUERDA;
+	private AudioClip sound;
+
+	private enum DIRECAO {
+		CIMA,
+		BAIXO,
+		ESQUERDA,
+		DIREITA
+	};
+
 	public Jogo() {
-		CriarMapa(new char[]{'@', ' ', ' ', ' ', ' ', '-', '-', ' ', '<', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*'});
+		char [] mapa = new char[]{' ', ' ', ' ', ' ', ' ', '-', '-', ' ', '<', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', '-', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', '-', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', '-', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', '-', ' ', '-', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', '-', ' ',
+                '\n', '-', '-', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', '-', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ', ' ',
+                '\n', '-', ' ', '-', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', '-', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ',
+                '\n', '-', ' ', '-', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', '-', ' ',
+                '\n', '-', '-', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', '-', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', '-', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' ', ' ',
+                '\n', ' ', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' '
+            };
+		CriarMapa(mapa);
+		try {
+			sound = Applet.newAudioClip( new File("pacman_eatghost.wav").toURL() );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Jogo(char[] mapa) {
@@ -47,11 +86,30 @@ public class Jogo {
 		if(!morreu) {
 			int posicaoBola = encontrarBola(mapa);
 			int posicaoAnterior = posicaoBola;
-			if (isDireita) {
-				if (posicaoBola < finalDaLinha()) posicaoBola++;
-			} else
-				if (posicaoBola > 0) posicaoBola--;
-			
+
+			switch (this.direcao) {
+			case DIREITA:
+				if (posicaoBola < finalDaLinha()) {
+					posicaoBola++;
+				}
+				break;
+			case ESQUERDA:
+				if (posicaoBola > 0) {
+					posicaoBola--;
+				}
+				break;
+			case BAIXO:
+				if (posicaoBola > 0) {
+					posicaoBola += 22;
+				}
+				break;
+			case CIMA:
+				if (posicaoBola > 0) {
+					posicaoBola -= 22;
+				}
+				break;
+			}
+
 			moverBola(posicaoAnterior, posicaoBola);
 			moverFantasma();
 		}
@@ -89,6 +147,7 @@ public class Jogo {
 			isFraco = false;
 		
 		mapa[posicaoAtual] = aparencia();
+		sound.play();
 	}
 	
 	private int finalDaLinha() {
@@ -96,15 +155,44 @@ public class Jogo {
 	}
 
 	private char aparencia() {
-		return isFraco ? (isDireita ? '<' : '>') : 'O';
+        if (!isFraco) {
+            return 'O';
+        }
+
+        switch (this.direcao) {
+            case DIREITA:
+                return '<';
+            case ESQUERDA:
+                return '>';
+            case BAIXO:
+                return 'v';
+            case CIMA:
+                return '^';
+            default:
+                return 'O';
+        }
 	}
 
 	public String getTela() {
 		StringBuilder tela = new StringBuilder();
-		return "|" + tela.append(mapa).toString() + "|";
+		return tela.append(mapa).toString();
 	}
 
-	public void esquerda()   { isDireita = false; }
-	public void direita()    { isDireita = true; }
-	public boolean isMorto() { return morreu; }
+    public void esquerda() {
+        this.direcao = DIRECAO.ESQUERDA;
+    }
+
+    public void direita() {
+        this.direcao = DIRECAO.DIREITA;
+    }
+
+    public void cima() {
+        this.direcao = DIRECAO.CIMA;
+    }
+
+    public void baixo() {
+        this.direcao = DIRECAO.BAIXO;
+    }
+    
+    public boolean isMorto() { return morreu; }
 }
