@@ -1,6 +1,8 @@
 package novo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import novo.Jogo.DIRECAO;
 
 import org.junit.Before;
@@ -58,7 +60,7 @@ public class PacbolaTest {
 	@Test
 	public void deveComerTudoOQuePassar() {
 		espera(11);
-		tela("B@    --            OB");
+		tela("B@    --            KB");
 	}
 	
 	@Test
@@ -108,10 +110,10 @@ public class PacbolaTest {
 	@Test
 	public void deveMatarFantasmaAposComerFruta() {
 		espera(11);
-		tela("B@    --            OB");
+		tela("B@    --            KB");
 		esquerda();
 		espera(19);
-		tela("BO                   B");
+		tela("BÇ                   B");
 		vivo();
 	}
 	
@@ -125,7 +127,7 @@ public class PacbolaTest {
 	public void reviverFantasma() {
 		matarFantasma();
 		espera();
-		tela("B@    --       O     B");
+		tela("B@    --       Ç     B");
 	}
 	
 	@Test
@@ -139,7 +141,7 @@ public class PacbolaTest {
 	@Test
 	public void bolaDevePararNoFinalADireita() {
 		espera(12);
-		tela("B@    --            OB");
+		tela("B@    --            KB");
 	}
 	
 	

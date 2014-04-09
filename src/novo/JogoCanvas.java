@@ -23,13 +23,17 @@ public class JogoCanvas extends JFrame {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(new Dimension(710, 710));
 		setBackground(Color.BLACK);
-		
+		          setTitle("ARENA PAC-MAN");
 		try {
-			_sprites.put('>', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-inverso.gif")));
-			_sprites.put('<', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
-			_sprites.put('v', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
-			_sprites.put('^', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman.gif")));		
-			_sprites.put('O', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-inverso-power.gif")));	
+			_sprites.put('B', ImageIO.read(JogoCanvas.class.getResourceAsStream("block.jpg")));
+			_sprites.put('>', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-e.png")));
+			_sprites.put('<', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-d.png")));		
+			_sprites.put('v', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-b.png")));		
+			_sprites.put('^', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-c.png")));		
+			_sprites.put('Ç', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-p-e.png")));
+			_sprites.put('K', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-p-d.png")));
+			_sprites.put('L', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-p-b.png")));
+			_sprites.put('O', ImageIO.read(JogoCanvas.class.getResourceAsStream("pacman-p-c.png")));                        
 			_sprites.put('@', ImageIO.read(JogoCanvas.class.getResourceAsStream("fantasma.png")));
 			_sprites.put('*', ImageIO.read(JogoCanvas.class.getResourceAsStream("fruta.jpg")));
 			_sprites.put('-', ImageIO.read(JogoCanvas.class.getResourceAsStream("moeda.jpg")));
