@@ -1,7 +1,9 @@
 package novo;
 
 import static org.junit.Assert.*;
+import novo.Jogo.DIRECAO;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -9,87 +11,93 @@ public class PacbolaTest {
 
 	private Jogo jogo = new Jogo();
 	
+	@Before
+	public void mapaDefault() {
+		char[] mapa = new char[]{'B', '@', ' ', ' ', ' ', ' ', '-', '-', ' ', '<', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', 'B'};
+		jogo = new Jogo(mapa, DIRECAO.DIREITA);
+	}
+	
 	@Test
 	public void DevePararAoEncontrarBloqueioDireita() {
 		char[] mapa = new char[]{'<', ' ', '-', '-', '-', '-', '-', 'B', '-', '-', '-'};
-		jogo = new Jogo(mapa);
-		tela("|< -----B---|");
+		jogo = new Jogo(mapa, DIRECAO.DIREITA);
+		tela("< -----B---");
 		espera(7);
-		tela("|      <B---|");
+		tela("      <B---");
 	}
 	
 	@Test
 	public void FantasmaDeveAparecerSeEstiverNoMapa() {
 		char[] mapa = new char[]{'<', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-'};
-		jogo = new Jogo(mapa);
-		tela("|< ---------|");
+		jogo = new Jogo(mapa, DIRECAO.DIREITA);
+		tela("< ---------");
 		espera();
-		tela("| <---------|");
+		tela(" <---------");
 	}
 	
 	@Test
 	public void PacmanAndarUmaPosicaoNoMapa(){
 		char[] mapa = new char[]{' ', ' ', '<', '-', '-', '-', '-', '-', '-', '-', '-'};
-		jogo = new Jogo(mapa);
-		tela("|  <--------|");
+		jogo = new Jogo(mapa, DIRECAO.DIREITA);
+		tela("  <--------");
 		espera();
-		tela("|   <-------|");
+		tela("   <-------");
 	}
 	
 
 	@Test
 	public void telaInicial() {
-		tela("|@    -- < ---------*|");
+		tela("B@    -- < ---------*B");
 	}
 
 	@Test
 	public void segundoFrame() {
 		espera();
-		tela("| @   --  <---------*|");
+		tela("B @   --  <---------*B");
 	}
 	
 	@Test
 	public void segundoFrameSeEsquerda() {
 		esquerda();
 		espera();
-		tela("| @   -->  ---------*|");
+		tela("B @   -->  ---------*B");
 	}
 	
 	@Test
 	public void deveComerTudoOQuePassar() {
 		espera(11);
-		tela("|     --    @       O|");
+		tela("B     --    @       OB");
 	}
 	
 	@Test
 	public void deveMudarDirecaoParaEsquerda() {
-		tela("|@    -- < ---------*|");
+		tela("B@    -- < ---------*B");
 		espera();
-		tela("| @   --  <---------*|");
+		tela("B @   --  <---------*B");
 		espera();
-		tela("|  @  --   <--------*|");
+		tela("B  @  --   <--------*B");
 		esquerda();
 		espera();
-		tela("|   @ --  > --------*|");
+		tela("B   @ --  > --------*B");
 	}
 
 	@Test
 	public void deveMudarDirecaoParaDireita() {
-		tela("|@    -- < ---------*|");
+		tela("B@    -- < ---------*B");
 		espera(2);
-		tela("|  @  --   <--------*|");
+		tela("B  @  --   <--------*B");
 		esquerda();
 		espera();
-		tela("|   @ --  > --------*|");
+		tela("B   @ --  > --------*B");
 		direita();
 		espera(2);
-		tela("|     @-    <-------*|");
+		tela("B     @-    <-------*B");
 	}
 	
 	@Test
 	public void deveFantasmaNaoComerFrutinha() {
 		espera(11);
-		tela("|     --    @       O|");
+		tela("B     --    @       OB");
 	}
 	
 	@Test
@@ -97,18 +105,18 @@ public class PacbolaTest {
 		vivo();
 		esquerda();
 		espera();
-		tela("| @   -->  ---------*|");
+		tela("B @   -->  ---------*B");
 		espera(2);
-		tela("|   @ >    ---------*|");
+		tela("B   @ >    ---------*B");
 		espera();
-		tela("|    @     ---------*|");
+		tela("B    @     ---------*B");
 		morreu();
 	}
 	
 	@Test
 	public void deveMatarFantasmaAposComerFruta() {
 		espera(19);
-		tela("|     --            O|");
+		tela("B     --            OB");
 		vivo();
 	}
 	
@@ -117,15 +125,15 @@ public class PacbolaTest {
 	public void fantasmaDevePararNoFinal() {
 		espera(18);
 		esquerda();
-		tela("|     --            @|");
+		tela("B     --            @B");
 	}
 	
 	@Test
-	public void pacmanDevePararNoFinalADireita() {
+	public void bolaDevePararNoFinalADireita() {
 		espera(12);
-		tela("|     --     @      O|");
+		tela("B     --     @      OB");
 		espera();
-		tela("|     --      @     O|");
+		tela("B     --      @     OB");
 	}
 	
 	

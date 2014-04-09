@@ -12,10 +12,10 @@ public class Jogo {
 	private boolean isFraco = true;
 	private boolean matouFantasma = false;
 	
-	private DIRECAO direcao = DIRECAO.ESQUERDA;
+	private DIRECAO direcao;
 	private AudioClip sound;
 
-	private enum DIRECAO {
+	public enum DIRECAO {
 		CIMA,
 		BAIXO,
 		ESQUERDA,
@@ -45,6 +45,7 @@ public class Jogo {
                 '\n', ' ', ' ', ' ', ' ', '-', '-', '-', '-', ' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', ' ', ' '
             };
 		CriarMapa(mapa);
+		direcao =  DIRECAO.ESQUERDA;
 		try {
 			sound = Applet.newAudioClip( new File("pacman_eatghost.wav").toURL() );
 		} catch (Exception e) {
@@ -52,14 +53,15 @@ public class Jogo {
 		}
 	}
 	
-	public Jogo(char[] mapa) {
+	public Jogo(char[] mapa, DIRECAO direcaoBola) {
 		CriarMapa(mapa);
+		direcao = direcaoBola;
 	}
 	
 	public int encontrarBola(char[] mapa){
 		int posicao = 0;
 		for (char c : mapa) {			
-			if ((c=='<') || (c=='>') || (c=='O'))				
+			if ((c=='<') || (c=='>') || (c=='v') || (c=='^')|| (c=='O'))				
 				return posicao;
 			
 			posicao++;
@@ -89,24 +91,16 @@ public class Jogo {
 
 			switch (this.direcao) {
 			case DIREITA:
-				if (posicaoBola < finalDaLinha()) {
 					posicaoBola++;
-				}
 				break;
 			case ESQUERDA:
-				if (posicaoBola > 0) {
 					posicaoBola--;
-				}
 				break;
 			case BAIXO:
-				if (posicaoBola > 0) {
 					posicaoBola += 22;
-				}
 				break;
 			case CIMA:
-				if (posicaoBola > 0) {
 					posicaoBola -= 22;
-				}
 				break;
 			}
 
@@ -138,16 +132,20 @@ public class Jogo {
 	}
 
 	private void moverBola(int posicaoAnterior, int posicaoAtual) {
-		mapa[posicaoAnterior] = ' ';
 
 		if(mapa[posicaoAtual] == 'B')
+		{
 			posicaoAtual = posicaoAnterior;
+		} else {
+			mapa[posicaoAnterior] = ' ';	
+		}
 		
 		if(mapa[posicaoAtual] == '*')
 			isFraco = false;
 		
 		mapa[posicaoAtual] = aparencia();
-		sound.play();
+		//FIXME: Ausencia do arquivo.
+		//sound.play();
 	}
 	
 	private int finalDaLinha() {
